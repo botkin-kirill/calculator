@@ -11,7 +11,7 @@ public class Calculator {
     static String[] romanSymbols = {"XC", "XL", "XXX", "XX", "IX", "IV", "III", "II", "C", "L", "X", "V", "I"};
 
 
-    static void calculate(String input) {
+    static String calculate(String input) {
         String[] data = input.split(" ");
         try {
             if (data.length > 3) {
@@ -57,14 +57,13 @@ public class Calculator {
                 if (result < 0) {
                     throw new ArithmeticException("exception: римская система счисления не поддерживает отрицательные значения");
                 }
-                System.out.println(convertDecimalToRoman(result));
-                return;
+                return convertDecimalToRoman(result);
             }
-            System.out.println(result);
+            return String.valueOf(result);
         } catch (IllegalArgumentException | ArithmeticException e) {
-            System.out.println(e.getMessage());
+            return e.getMessage();
         } catch (Exception e) {
-            System.out.println(e.getMessage());
+            return e.getMessage();
         }
     }
 
