@@ -14,10 +14,13 @@ public class Calculator {
     static void calculate(String input) {
         String[] data = input.split(" ");
         try {
+            if (data.length > 3) {
+                throw new IllegalArgumentException("exception: калькулятор работает только с 2 операторами и 1 бинарным операндом");
+            }
             String left_operator = data[0];
             String operand = data[1];
             if (!isOperandCorrect(operand)) {
-                throw new IllegalArgumentException("invalid operand");
+                throw new IllegalArgumentException("exception: invalid operand");
             }
             String right_operator = data[2];
             int system_type = choose_number_system(left_operator, right_operator);
@@ -29,7 +32,7 @@ public class Calculator {
             int rightOperatorInt = Integer.parseInt(right_operator);
             if (leftOperatorInt < 1 || leftOperatorInt > 10
                     || rightOperatorInt < 1 || rightOperatorInt > 10) {
-                throw new IllegalArgumentException("input less than 1 or greater than 10");
+                throw new IllegalArgumentException("exception:input less than 1 or greater than 10");
             }
             char operandChar = operand.charAt(0);
             int result;
@@ -47,19 +50,21 @@ public class Calculator {
                     result = leftOperatorInt / rightOperatorInt;
                     break;
                 default:
-                    throw new IllegalArgumentException("invalid operand");
+                    throw new IllegalArgumentException("exception:invalid operand");
             }
             if (system_type == 1) {
                 //todo            вернуть децимал ту роман
+                if (result < 0) {
+                    throw new ArithmeticException("exception: римская система счисления не поддерживает отрицательные значения");
+                }
                 System.out.println(convertDecimalToRoman(result));
                 return;
             }
             System.out.println(result);
-        } catch (IllegalArgumentException e) {
+        } catch (IllegalArgumentException | ArithmeticException e) {
             System.out.println(e.getMessage());
         } catch (Exception e) {
             System.out.println(e.getMessage());
-            System.out.println("ошибка ввода");
         }
     }
 
@@ -69,7 +74,7 @@ public class Calculator {
             return 0;
         } else if (isRomanNumeral(left) && isRomanNumeral(right)) {
             return 1;
-        } else throw new IllegalArgumentException("invalid input");
+        } else throw new IllegalArgumentException("exception:invalid input");
     }
 
     private static int convertRomanToDecimal(String input) {
@@ -95,10 +100,10 @@ public class Calculator {
         for (int i = 0; i < list.size(); i++) {
             int element = list.get(i);
             if (element != 0) {
-                if (element>5 && element<9){
+                if (element > 5 && element < 9) {
                     int subelement = (int) ((5 * Math.pow(10, (list.size() - i - 1))));
                     sb.append(romanSymbols[romanValues_list.indexOf(subelement)]);
-                    element-=5;
+                    element -= 5;
                 }
                 element = (int) (element * Math.pow(10, (list.size() - i - 1)));
                 int symbol_index = romanValues_list.indexOf(element);
@@ -118,7 +123,7 @@ public class Calculator {
                     return true;
                 }
             }
-            throw new IllegalArgumentException("invalid operand");
+            throw new IllegalArgumentException("exception:invalid operand");
         } catch (Exception e) {
             return false;
         }
